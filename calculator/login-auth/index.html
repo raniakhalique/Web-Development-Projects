@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora — Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#120f1c;
+    --bg-2:#0d0b16;
+    --surface:#1c1830;
+    --surface-raised:#241f3d;
+    --accent:#9b6bff;
+    --accent-2:#56d6ff;
+    --text:#f1edff;
+    --text-muted:#a79fc4;
+    --success:#6ee7b7;
+    --danger:#ff6f8f;
+    --shadow-dark: rgba(4,2,10,0.55);
+    --shadow-light: rgba(255,255,255,0.05);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    background: radial-gradient(circle at 20% 20%, #241a44 0%, var(--bg) 45%), var(--bg-2);
+    font-family:'Sora', sans-serif;
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .orb{ position:fixed; border-radius:50%; filter:blur(70px); z-index:0; pointer-events:none;}
+  .orb.a{ width:360px; height:360px; background:var(--accent); top:-110px; left:-90px; opacity:0.32;}
+  .orb.b{ width:280px; height:280px; background:var(--accent-2); bottom:-80px; right:-70px; opacity:0.22;}
+
+  .card{
+    position:relative; z-index:1;
+    width:100%; max-width:380px;
+    background:var(--surface);
+    border-radius:26px;
+    padding:38px 32px 30px;
+    box-shadow: 12px 12px 28px var(--shadow-dark), -8px -8px 20px var(--shadow-light);
+  }
+
+  .brand{ text-align:center; margin-bottom:6px; }
+  .brand .mark{
+    width:52px; height:52px; margin:0 auto 16px;
+    border-radius:16px;
+    background: linear-gradient(145deg, #a67bff, #6f4de0);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 5px 5px 12px var(--shadow-dark), -3px -3px 8px rgba(255,255,255,0.05);
+  }
+  .brand .mark svg{ width:24px; height:24px; }
+  .brand h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.7rem;
+  }
+  .brand p{
+    color:var(--text-muted);
+    font-size:0.85rem;
+    margin-top:6px;
+  }
+
+  .tabs{
+    display:flex;
+    gap:6px;
+    margin:26px 0 22px;
+    background:var(--bg-2);
+    border-radius:14px;
+    padding:5px;
+    box-shadow: inset 3px 3px 8px var(--shadow-dark), inset -2px -2px 6px var(--shadow-light);
+  }
+  .tabs button{
+    flex:1;
+    border:none;
+    background:transparent;
+    color:var(--text-muted);
+    font-family:'Sora', sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    padding:9px 0;
+    border-radius:10px;
+    cursor:pointer;
+    transition: all 0.2s ease;
+  }
+  .tabs button.active{
+    background: linear-gradient(145deg, #a67bff, #7b52e8);
+    color:#fff;
+  }
+
+  form{ display:none; flex-direction:column; gap:16px; }
+  form.active{ display:flex; }
+
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-size:0.78rem; color:var(--text-muted); font-weight:500; }
+  .field .input-wrap{
+    display:flex; align-items:center;
+    background:var(--bg-2);
+    border-radius:13px;
+    padding:0 14px;
+    box-shadow: inset 3px 3px 8px var(--shadow-dark), inset -2px -2px 6px var(--shadow-light);
+    border:1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+  .field .input-wrap.error{ border-color: var(--danger); }
+  .field .input-wrap.valid{ border-color: var(--success); }
+  .field input{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--text);
+    font-family:'Sora', sans-serif;
+    font-size:0.9rem;
+    padding:12px 0;
+  }
+  .field input::placeholder{ color:#6b6285; }
+  .field .toggle-vis{
+    background:none; border:none; color:var(--text-muted);
+    cursor:pointer; font-size:0.75rem; font-weight:600;
+    padding:4px;
+  }
+  .field .hint{ font-size:0.72rem; min-height:14px; }
+  .field .hint.error{ color:var(--danger); }
+  .field .hint.ok{ color:var(--success); }
+
+  .strength{
+    display:flex; gap:4px; margin-top:2px;
+  }
+  .strength div{
+    height:4px; flex:1; border-radius:2px; background:var(--surface-raised);
+    transition: background 0.2s ease;
+  }
+  .strength div.on.weak{ background:var(--danger); }
+  .strength div.on.mid{ background:#e3c17c; }
+  .strength div.on.strong{ background:var(--success); }
+
+  .row{ display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; }
+  .remember{ display:flex; align-items:center; gap:8px; color:var(--text-muted); cursor:pointer; }
+  .remember input{ accent-color: var(--accent); width:14px; height:14px; }
+  .row a{ color:var(--accent-2); text-decoration:none; }
+
+  .submit{
+    margin-top:6px;
+    padding:13px 0;
+    border:none;
+    border-radius:14px;
+    background: linear-gradient(145deg, #a67bff, #7b52e8);
+    color:#fff;
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:0.9rem;
+    cursor:pointer;
+    box-shadow: 5px 5px 14px var(--shadow-dark), -3px -3px 8px rgba(255,255,255,0.05);
+    transition: transform 0.12s ease;
+  }
+  .submit:active{ transform: scale(0.98); }
+
+  .success{
+    display:none;
+    text-align:center;
+    padding:30px 0 10px;
+  }
+  .success.active{ display:block; }
+  .success .glyph{
+    width:54px; height:54px; margin:0 auto 16px;
+    border-radius:50%;
+    background: linear-gradient(145deg, var(--accent-2), var(--accent));
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem;
+  }
+  .success h2{ font-family:'Fraunces', serif; font-size:1.3rem; margin-bottom:6px; }
+  .success p{ color:var(--text-muted); font-size:0.85rem; }
+  .success button{
+    margin-top:20px;
+    background:none; border:none;
+    color:var(--accent-2);
+    font-size:0.82rem; font-weight:600;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+  <div class="orb a"></div>
+  <div class="orb b"></div>
+
+  <div class="card">
+    <div class="brand">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 9H21.5L15.5 13.5L18 21L12 16.5L6 21L8.5 13.5L2.5 9H9.5L12 2Z" fill="white"/></svg>
+      </div>
+      <h1>Aurora</h1>
+      <p>Sign in to keep things moving</p>
+    </div>
+
+    <div class="tabs">
+      <button class="active" data-tab="login">Log in</button>
+      <button data-tab="signup">Sign up</button>
+    </div>
+
+    <form id="login-form" class="active">
+      <div class="field">
+        <label for="login-email">Email</label>
+        <div class="input-wrap" id="login-email-wrap">
+          <input id="login-email" type="text" placeholder="you@example.com" autocomplete="username">
+        </div>
+        <div class="hint" id="login-email-hint"></div>
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <div class="input-wrap" id="login-password-wrap">
+          <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
+          <button type="button" class="toggle-vis" data-target="login-password">Show</button>
+        </div>
+        <div class="hint" id="login-password-hint"></div>
+      </div>
+      <div class="row">
+        <label class="remember"><input type="checkbox"> Remember me</label>
+        <a href="#" id="forgot-link">Forgot password?</a>
+      </div>
+      <button type="submit" class="submit">Log in</button>
+    </form>
+
+    <form id="signup-form">
+      <div class="field">
+        <label for="signup-name">Full name</label>
+        <div class="input-wrap" id="signup-name-wrap">
+          <input id="signup-name" type="text" placeholder="Your name" autocomplete="name">
+        </div>
+        <div class="hint" id="signup-name-hint"></div>
+      </div>
+      <div class="field">
+        <label for="signup-email">Email</label>
+        <div class="input-wrap" id="signup-email-wrap">
+          <input id="signup-email" type="text" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="hint" id="signup-email-hint"></div>
+      </div>
+      <div class="field">
+        <label for="signup-password">Password</label>
+        <div class="input-wrap" id="signup-password-wrap">
+          <input id="signup-password" type="password" placeholder="Create a password" autocomplete="new-password">
+          <button type="button" class="toggle-vis" data-target="signup-password">Show</button>
+        </div>
+        <div class="strength">
+          <div id="s1"></div><div id="s2"></div><div id="s3"></div>
+        </div>
+        <div class="hint" id="signup-password-hint"></div>
+      </div>
+      <button type="submit" class="submit">Create account</button>
+    </form>
+
+    <div class="success" id="success-panel">
+      <div class="glyph">✓</div>
+      <h2 id="success-title">You're in</h2>
+      <p id="success-msg">Welcome back — redirecting you now.</p>
+      <button id="reset-btn">Back to form</button>
+    </div>
+  </div>
+
+<script>
+  // In-memory demo "database" — resets on page reload since this is a front-end-only demo.
+  const users = [];
+
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setState(wrapId, hintId, ok, msg){
+    const wrap = document.getElementById(wrapId);
+    const hint = document.getElementById(hintId);
+    wrap.classList.remove('error','valid');
+    hint.classList.remove('error','ok');
+    if(msg === null){ hint.textContent=''; return; }
+    wrap.classList.add(ok ? 'valid' : 'error');
+    hint.classList.add(ok ? 'ok' : 'error');
+    hint.textContent = msg;
+  }
+
+  // Tab switching
+  document.querySelectorAll('.tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelector('.tabs button.active').classList.remove('active');
+      btn.classList.add('active');
+      document.querySelectorAll('form').forEach(f => f.classList.remove('active'));
+      document.getElementById(btn.dataset.tab + '-form').classList.add('active');
+      document.getElementById('success-panel').classList.remove('active');
+    });
+  });
+
+  // Password visibility toggle
+  document.querySelectorAll('.toggle-vis').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target);
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      btn.textContent = show ? 'Hide' : 'Show';
+    });
+  });
+
+  // Signup password strength
+  const signupPw = document.getElementById('signup-password');
+  signupPw.addEventListener('input', () => {
+    const v = signupPw.value;
+    let score = 0;
+    if(v.length >= 6) score++;
+    if(/[A-Z]/.test(v) && /[0-9]/.test(v)) score++;
+    if(v.length >= 10 && /[^A-Za-z0-9]/.test(v)) score++;
+    ['s1','s2','s3'].forEach((id,i) => {
+      const bar = document.getElementById(id);
+      bar.classList.remove('on','weak','mid','strong');
+      if(i < score){
+        bar.classList.add('on', score === 1 ? 'weak' : score === 2 ? 'mid' : 'strong');
+      }
+    });
+  });
+
+  // Login submit
+  document.getElementById('login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value.trim();
+    const pw = document.getElementById('login-password').value;
+    let valid = true;
+
+    if(!emailRe.test(email)){
+      setState('login-email-wrap','login-email-hint', false, 'Enter a valid email address');
+      valid = false;
+    } else {
+      setState('login-email-wrap','login-email-hint', true, null);
+    }
+    if(pw.length < 6){
+      setState('login-password-wrap','login-password-hint', false, 'Password must be at least 6 characters');
+      valid = false;
+    } else {
+      setState('login-password-wrap','login-password-hint', true, null);
+    }
+    if(!valid) return;
+
+    document.getElementById('login-form').classList.remove('active');
+    document.getElementById('success-title').textContent = 'Welcome back';
+    document.getElementById('success-msg').textContent = "You're logged in — redirecting you now.";
+    document.getElementById('success-panel').classList.add('active');
+  });
+
+  // Signup submit
+  document.getElementById('signup-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const pw = signupPw.value;
+    let valid = true;
+
+    if(name.length < 2){
+      setState('signup-name-wrap','signup-name-hint', false, 'Enter your full name');
+      valid = false;
+    } else {
+      setState('signup-name-wrap','signup-name-hint', true, null);
+    }
+    if(!emailRe.test(email)){
+      setState('signup-email-wrap','signup-email-hint', false, 'Enter a valid email address');
+      valid = false;
+    } else if(users.some(u => u.email === email)){
+      setState('signup-email-wrap','signup-email-hint', false, 'That email is already registered');
+      valid = false;
+    } else {
+      setState('signup-email-wrap','signup-email-hint', true, null);
+    }
+    if(pw.length < 6){
+      setState('signup-password-wrap','signup-password-hint', false, 'Use at least 6 characters');
+      valid = false;
+    } else {
+      setState('signup-password-wrap','signup-password-hint', true, null);
+    }
+    if(!valid) return;
+
+    users.push({ name, email, pw });
+    document.getElementById('signup-form').classList.remove('active');
+    document.getElementById('success-title').textContent = 'Account created';
+    document.getElementById('success-msg').textContent = `Welcome, ${name.split(' ')[0]} — you can now log in.`;
+    document.getElementById('success-panel').classList.add('active');
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    document.getElementById('success-panel').classList.remove('active');
+    document.querySelector('.tabs button.active').click();
+  });
+
+  document.getElementById('forgot-link').addEventListener('click', e => e.preventDefault());
+</script>
+</body>
+</html>
