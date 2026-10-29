@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ada Lovelace — A Tribute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#120f1c;
+    --bg-2:#0d0b16;
+    --surface:#1c1830;
+    --surface-raised:#241f3d;
+    --accent:#9b6bff;
+    --accent-2:#56d6ff;
+    --gold:#e3c17c;
+    --text:#f1edff;
+    --text-muted:#a79fc4;
+    --shadow-dark: rgba(4,2,10,0.55);
+    --shadow-light: rgba(255,255,255,0.05);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background: radial-gradient(circle at 80% 0%, #23193f 0%, var(--bg) 40%), var(--bg-2);
+    font-family:'Sora', sans-serif;
+    color:var(--text);
+  }
+  .orb{ position:fixed; border-radius:50%; filter:blur(70px); opacity:0.3; z-index:0; pointer-events:none;}
+  .orb.a{ width:380px; height:380px; background:var(--accent); top:-120px; right:-100px; }
+  .orb.b{ width:260px; height:260px; background:var(--gold); bottom:0; left:-100px; opacity:0.15;}
+
+  main{ position:relative; z-index:1; max-width:720px; margin:0 auto; padding:0 24px 100px; }
+
+  header.hero{
+    padding:90px 0 56px;
+    text-align:center;
+  }
+  .medallion{
+    width:150px; height:150px;
+    margin:0 auto 28px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #3a2e63, #17132a 75%);
+    box-shadow: 10px 10px 24px var(--shadow-dark), -8px -8px 20px rgba(255,255,255,0.04), inset 0 0 0 1px rgba(227,193,124,0.25);
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .medallion svg{ width:70px; height:70px; opacity:0.85; }
+
+  header.hero .eyebrow{
+    font-size:0.78rem;
+    color:var(--gold);
+    letter-spacing:0.03em;
+    margin-bottom:10px;
+  }
+  header.hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:3.4rem;
+    line-height:1.05;
+    letter-spacing:-0.01em;
+  }
+  header.hero .years{
+    color:var(--text-muted);
+    font-size:0.95rem;
+    margin-top:10px;
+  }
+  header.hero .epithet{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.15rem;
+    color:var(--accent-2);
+    margin-top:22px;
+    max-width:480px;
+    margin-left:auto; margin-right:auto;
+    line-height:1.5;
+  }
+
+  section{ margin-top:64px; }
+  section h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.7rem;
+    margin-bottom:20px;
+  }
+  section p{
+    font-size:0.98rem;
+    line-height:1.75;
+    color:#dcd6f0;
+    max-width:64ch;
+  }
+  section p + p{ margin-top:14px; }
+
+  .timeline{
+    margin-top:28px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .tl-item{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:18px;
+    padding:18px 0;
+    border-top:1px solid rgba(255,255,255,0.06);
+  }
+  .tl-item:first-child{ border-top:none; }
+  .tl-year{
+    font-family:'Fraunces', serif;
+    color:var(--gold);
+    font-size:1rem;
+    padding-top:2px;
+  }
+  .tl-body h3{
+    font-size:0.98rem;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .tl-body p{
+    font-size:0.88rem;
+    color:var(--text-muted);
+    line-height:1.6;
+  }
+
+  .quote-block{
+    margin-top:64px;
+    background:var(--surface);
+    border-radius:22px;
+    padding:40px 36px;
+    box-shadow: 8px 8px 20px var(--shadow-dark), -6px -6px 16px var(--shadow-light);
+    text-align:center;
+  }
+  .quote-block p{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.3rem;
+    line-height:1.55;
+    color:var(--text);
+    max-width:none;
+  }
+  .quote-block span{
+    display:block;
+    margin-top:16px;
+    font-family:'Sora', sans-serif;
+    font-style:normal;
+    font-size:0.8rem;
+    color:var(--text-muted);
+  }
+
+  footer{
+    text-align:center;
+    margin-top:80px;
+    color:var(--text-muted);
+    font-size:0.78rem;
+  }
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <div class="medallion">
+      <svg viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="38" r="18" stroke="#e3c17c" stroke-width="2"/>
+        <path d="M20 90c0-20 13-34 30-34s30 14 30 34" stroke="#56d6ff" stroke-width="2"/>
+      </svg>
+    </div>
+    <div class="eyebrow">A tribute to</div>
+    <h1>Ada Lovelace</h1>
+    <div class="years">1815 – 1852 · Mathematician &amp; Writer</div>
+    <p class="epithet">She looked at a machine built to calculate and saw something no one else did: a machine that could create.</p>
+  </header>
+
+  <section>
+    <h2>Who she was</h2>
+    <p>Augusta Ada King, Countess of Lovelace, was a British mathematician raised on a strict diet of logic and science — her mother's deliberate antidote to the poetic temperament of her father, Lord Byron. That grounding gave her a rare gift: the ability to think about machines not just as calculators, but as instruments capable of working with anything that could be expressed in symbols.</p>
+    <p>In 1833, she met mathematician Charles Babbage and became fascinated by his design for the Analytical Engine, a mechanical general-purpose computer that would never be built in her lifetime.</p>
+  </section>
+
+  <section>
+    <h2>What she did</h2>
+    <p>Between 1842 and 1843, Ada translated an Italian paper on the Analytical Engine and appended her own notes — three times longer than the original text. Buried in Note G is what historians consider the first algorithm intended to be carried out by a machine: a method for computing Bernoulli numbers.</p>
+    <p>She went further than describing arithmetic. She proposed that such a machine could one day manipulate symbols, letters, and even music — an idea that would not be taken seriously again for over a century.</p>
+  </section>
+
+  <section>
+    <h2>Timeline</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1815</div>
+        <div class="tl-body"><h3>Born in London</h3><p>Daughter of the poet Lord Byron and mathematician Anne Isabella Milbanke.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1833</div>
+        <div class="tl-body"><h3>Meets Charles Babbage</h3><p>Introduced to his early calculating engine at a London demonstration.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1843</div>
+        <div class="tl-body"><h3>Publishes her notes</h3><p>Her translation and annotations describe the first published algorithm for a machine.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1852</div>
+        <div class="tl-body"><h3>Dies at 36</h3><p>Her work remained largely unrecognized until it was rediscovered in the 20th century.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1980</div>
+        <div class="tl-body"><h3>A language named in her honor</h3><p>The U.S. Department of Defense names the Ada programming language after her.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="quote-block">
+    <p>"The Analytical Engine weaves algebraic patterns, just as the Jacquard loom weaves flowers and leaves."</p>
+    <span>— Ada Lovelace, 1843</span>
+  </div>
+
+  <footer>Built with admiration, one algorithm at a time.</footer>
+</main>
+</body>
+</html>
